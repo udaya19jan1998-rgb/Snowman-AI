@@ -22,38 +22,6 @@ This repository contains:
 
 ---
 
-## ✨ What’s New in v4.12
-
-This update focuses on **lower memory pressure, fewer unnecessary model calls, and support for more file types**, while keeping Snowman’s local chat, vision, image generation, and editing workflow.
-
-| Update | What changed | Why it matters |
-| --- | --- | --- |
-| ⚡ Direct request paths | Normal text chat and explicit image actions can skip the JSON router. | Avoids an extra model inference when the action is already known. |
-| 🖼 Faster single-image answers | A single-image vision request returns the vision answer directly. | Avoids the extra synthesis call used when combining multiple images. |
-| 🧠 Model memory management | Snowman requests unloading of the image model before chat/vision, and chat/vision models before image generation. | Reduces the need to keep both large model families resident together. |
-| 🧊 Low-memory startup | The included script limits Ollama to one loaded model and one parallel request, and requests Flash Attention with a quantized KV cache. | Reduces memory pressure on supported configurations. |
-| 🎨 Lighter image defaults | Default generation uses **448 × 448** images and **3 steps**. | Prioritizes quicker previews and a smaller image workload; quality depends on the model and settings. |
-| 📄 Document understanding | Upload PDF, DOCX, and supported text/code files. | Ask questions about local documents without a cloud document service. |
-| 🧩 Mixed uploads | Combine documents and images in one question. | Snowman combines document excerpts with descriptions of the attached images. |
-| 📏 Bounded document context | Long files are reduced to selected excerpts, with a partial-coverage notice. | Keeps document input within a manageable context budget. |
-| 🔧 Clearer backend structure | Document handling and image arguments live in dedicated modules. | Makes the backend easier to maintain and extend. |
-| ⏱ Optional timing logs | Enable `SNOWMAN_LOG_TIMINGS=1`. | Inspect model load time, total inference time, token count, and tokens per second. |
-
-### 🐛 Bug Fixes & Reliability Updates
-
-- **Mixed uploads:** images and documents in the same message are now handled together, combining extracted document text with image descriptions for a shared answer.
-- **File validation:** unsupported files, unreadable documents, and incompatible file/action combinations return clearer errors instead of being sent through the wrong processing path.
-- **Long-document coverage:** responses flag when only selected excerpts were processed, so a partial review is not presented as a full-document review.
-- **Image-generation arguments:** image dimensions and step counts are validated before starting Ollama, and prompt text is separated from command-line options.
-- **Response-limit diagnostics:** the server logs a warning when Ollama reports that an answer reached its output limit, making incomplete responses easier to diagnose.
-
-> [!NOTE]
-> **Microphone fix from the latest follow-up patch:** stop speech recognition and clear the active transcript when sending a message, whether through Enter or the Send button. Apply that patch to `client/src/App.js` before publishing this release—the uploaded source archive reviewed for this README still contains the earlier `send()` implementation.
-
-**Performance depends on your hardware, model loading, and workload.** These changes reduce specific sources of overhead; no measured speedup or RAM-saving percentage is claimed. Switching between model families can still incur a reload delay.
-
----
-
 ## ✅ Features
 
 ### 💬 Chat UI
